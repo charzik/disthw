@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import json
 
-with open('/etc/disthw/secdist.json', 'r') as read_file:
+with open('secdist.json', 'r') as read_file:
     secdist = json.load(read_file)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
