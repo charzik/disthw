@@ -3,11 +3,12 @@ version: '3.3'
 services:
     db:
       image: postgres
-    disthw:
+      environment: 
+        POSTGRES_PASSWORD: password1
+        POSTGRES_USER: postgres
+        POSTGRES_DB: disthw_db
+    server:
       build: .
-      command: python manage.py runserver 0.0.0.0:8080
-      volumes:
-        - .:/app
       ports:
         - "8080:8080"
       depends_on:
