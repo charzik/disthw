@@ -4,7 +4,7 @@ Instruction for setting up server **WITH DOCKER COMPOSE**.
 
 1. Create `secdist.json` file with secrects of your app. Use `secdist_example.json` schema.
 
-2 Run server with docker-compose `sudo docker-compose build && sudo docker-compose up`.
+2. Run server with docker-compose `sudo docker-compose build && sudo docker-compose up`.
 
 Instruction for setting up server **WITH LOCAL POSTGRESQL**.
 
