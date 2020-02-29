@@ -1,6 +1,10 @@
 # disthw
 
-Web server for online store based on Django framework. Databse for storing data is PostgreSQL.
+Web server for **ONLINE STORE**. 
+
+Service architecture:
+* Python Django - web framework.
+* PostgreSQL - database.
 
 Instruction for setting up server **WITH DOCKER COMPOSE**.
 
