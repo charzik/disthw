@@ -1,9 +1,0 @@
-{
-    "secret_key": "secret_123",
-    "postgresql": {
-        "user": "postgres",
-        "password": "password1",
-        "host": "db",
-        "port": 5432
-    }
-}

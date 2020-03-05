@@ -14,6 +14,12 @@ services:
       ports:
         - "8080:8080"
       command: ["./tools/wait.sh", "db:5432", "--", "./tools/run.sh"]
+      environment:
+        DJANGO_PG_USER: postgres
+        DJANGO_PG_PASSWORD: password1
+        DJANGO_PG_HOST: db
+        DJANGO_PG_PORT: 5432
+        DJANGO_SECRET_KEY: secret123
       depends_on:
         - db
       networks:
