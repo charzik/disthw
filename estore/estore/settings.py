@@ -2,7 +2,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '123')
 
 DEBUG = True
 
@@ -17,7 +17,7 @@ INSTALLED_APPS = [
     'items'
 ]
 
-ROOT_URLCONF = 'disthw.urls'
+ROOT_URLCONF = 'estore.urls'
 
 TEMPLATES = [
     {
@@ -42,16 +42,16 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-WSGI_APPLICATION = 'disthw.wsgi.application'
+WSGI_APPLICATION = 'estore.wsgi.application'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'disthw_db',
-        'USER' : os.environ['DJANGO_PG_USER'],
-        'PASSWORD' : os.environ['DJANGO_PG_PASSWORD'],
-        'HOST' : os.environ['DJANGO_PG_HOST'],
-        'PORT' : os.environ['DJANGO_PG_PORT'],
+        'NAME': 'estore_db',
+        'USER' : os.environ.get('DJANGO_PG_USER', 'postgres'),
+        'PASSWORD' : os.environ.get('DJANGO_PG_PASSWORD', 'password1'),
+        'HOST' : os.environ.get('DJANGO_PG_HOST', 'localhost'),
+        'PORT' : os.environ.get('DJANGO_PG_PORT', 5432),
     }
 }
 

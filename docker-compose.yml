@@ -6,14 +6,16 @@ services:
       environment: 
         POSTGRES_PASSWORD: password1
         POSTGRES_USER: postgres
-        POSTGRES_DB: disthw_db
+        POSTGRES_DB: estore_db
       networks:
         - net
-    server:
-      build: .
+    estore:
+      build:
+        context: ./
+        dockerfile: ./estore/Dockerfile
       ports:
         - "8080:8080"
-      command: ["./tools/wait.sh", "db:5432", "--", "./tools/run.sh"]
+      command: ["./wait.sh", "db:5432", "--", "./run.sh"]
       environment:
         DJANGO_PG_USER: postgres
         DJANGO_PG_PASSWORD: password1
