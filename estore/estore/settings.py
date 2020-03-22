@@ -4,9 +4,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '123')
 
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', False)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [os.environ.get('ESTORE_ALLOWED_HOSTS', 'localhost')]
 
 INSTALLED_APPS = [
     'django.contrib.auth',
