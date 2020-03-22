@@ -11,34 +11,11 @@ ALLOWED_HOSTS = [os.environ.get('ESTORE_ALLOWED_HOSTS', 'localhost')]
 INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.staticfiles',
     'rest_framework',
-    'rest_framework_swagger',
     'items'
 ]
 
 ROOT_URLCONF = 'estore.urls'
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-            'libraries': { 
-                'staticfiles' : 'django.templatetags.static',
-            }
-        },
-    },
-]
-
-STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
@@ -69,8 +46,4 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
-}
-
-SWAGGER_SETTINGS = {
-    'USE_SESSION_AUTH': False,
 }
