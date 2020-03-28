@@ -3,7 +3,7 @@ from requests import request as proxy_request
 from django.conf import settings
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework.permissions import  IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 @permission_classes((IsAuthenticated, ))
