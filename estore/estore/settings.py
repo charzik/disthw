@@ -6,7 +6,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '123')
 
 DEBUG = os.environ.get('DJANGO_DEBUG', False)
 
-ALLOWED_HOSTS = [os.environ.get('ESTORE_ALLOWED_HOSTS', 'localhost')]
+ALLOWED_HOSTS = [os.environ.get('INTERNAL_SERVICES_ALLOWED_HOSTS', 'localhost')]
 
 INSTALLED_APPS = [
     'django.contrib.auth',

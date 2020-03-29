@@ -1,4 +1,4 @@
-from requests import request as proxy_request
+from requests import request as http_request
 
 from django.conf import settings
 from rest_framework.decorators import api_view, permission_classes
@@ -16,7 +16,7 @@ def proxy_view(request, url):
     })
     headers.pop('Authorization')
     try:
-        response = proxy_request(
+        response = http_request(
             method=request.method,
             url='http://%s:%s/%s' % (
                 settings.PROXY_HOST, 

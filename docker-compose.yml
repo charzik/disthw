@@ -48,7 +48,7 @@ services:
         DJANGO_PG_HOST: db
         DJANGO_PG_PORT: 5432
         DJANGO_SECRET_KEY: secret123
-        ESTORE_ALLOWED_HOSTS: auth
+        INTERNAL_SERVICES_ALLOWED_HOSTS: auth
         WAIT_PG_DB: estore_db
       depends_on:
         - db

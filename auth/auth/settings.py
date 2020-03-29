@@ -5,10 +5,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '123')
 
-DEBUG = os.environ.get('DJANGO_DEBUG', True) # TODO: set false
+DEBUG = os.environ.get('DJANGO_DEBUG', False)
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -80,8 +79,9 @@ JWT_AUTH = {
 AUTH_USER_MODEL = 'user.Account'
 
 PROXY_HOST = os.environ.get('PROXY_HOST', 'localhost')
-
 PROXY_PORT = os.environ.get('PROXY_PORT', 8081)
+NOTIFICATION_HOST = os.environ.get('NOTIFICATION_HOST', 'localhost')
+NOTIFICATION_PORT = os.environ.get('NOTIFICATION_PORT', 8082)
 
 LANGUAGE_CODE = 'en-us'
 
