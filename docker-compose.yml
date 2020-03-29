@@ -1,6 +1,15 @@
 version: '3.3'
 
 services:
+    rebbitmq:
+      image: rebbitmq
+      environment:
+        RABBITMQ_USERNAME: disthw
+        RABBITMQ_PASSWORD: password1
+        RABBITMQ_VHOST: disthw_host
+      networks:
+          - net 
+
     db:
       image: postgres
       volumes:
@@ -29,6 +38,8 @@ services:
         PROXY_HOST: estore
         PROXY_PORT: 8080
         WAIT_PG_DB: auth_db
+        NOTIFICATION_HOST: notification
+        NOTIFICATION_PORT: 8080
       depends_on:
         - db
       networks:
@@ -52,6 +63,27 @@ services:
         WAIT_PG_DB: estore_db
       depends_on:
         - db
+      networks:
+        - net
+
+    notification:
+      build:
+        context: ./
+        dockerfile: ./estore/Dockerfile
+      ports:
+        - "8082:8080"
+      command: ["./wait.sh", "rebbitmq:5672", "--", "./run_notification.sh"]
+      environment:
+        DJANGO_DEBUG: 1
+        DJANGO_SECRET_KEY: secret123
+        INTERNAL_SERVICES_ALLOWED_HOSTS: auth
+        DJANGO_BROKER_USER: disthw
+        DJANGO_BROKER_PASSWORD: password1
+        DJANGO_BROKER_HOST: rabbitmq
+        DJANGO_BROKER_PORT: 5672
+        DJANGO_BROKER_VHOST: disthw_host
+      depends_on:
+        - rabbitmq
       networks:
         - net
 

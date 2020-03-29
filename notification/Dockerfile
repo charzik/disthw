@@ -8,4 +8,4 @@ RUN pip install -r req.txt
 ADD notification/ /app/
 ADD tools/ /app/
 
-CMD python run_notification.sh
+CMD run_notification.sh
