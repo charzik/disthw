@@ -13,21 +13,22 @@ def registration_view(request):
     confirm_url = 'some url'
     serializer = serializers.RegistrationSerializer(data=request.data)
     if not serializer.is_valid():
-        return Response(serializer.errors)
+        return Response(status=400, data=serializer.errors)
 
     user = serializer.save()
-    notification_response = http_request(
-        method=request.method,
-        url='http://%s:%s/%s' % (
-            settings.NOTIFICATION_HOST, 
-            settings.NOTIFICATION_PORT, 
-            'v1/send-registartion-email'
-        ),
-        json={
-            'email': user.email,
-            'confirm_url': confirm_url
-        }
-    )
+    try:
+        notification_response = http_request(
+            method='POST',
+            url='http://%s:%s/%s'
+            % (
+                settings.NOTIFICATION_HOST,
+                settings.NOTIFICATION_PORT,
+                'v1/send-registartion-email',
+            ),
+            json={'email': user.email, 'confirm_url': confirm_url},
+        )
+    except:
+        return Response(status=500, data={'text': 'internal server error'})
     if not (notification_response.status_code == 200):
         return Response(status=500, data={'text': 'internal server error'})
     return Response(data={'username': user.username})

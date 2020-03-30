@@ -1,8 +1,8 @@
 version: '3.3'
 
 services:
-    rebbitmq:
-      image: rebbitmq
+    rabbitmq:
+      image: 'bitnami/rabbitmq:latest'
       environment:
         RABBITMQ_USERNAME: disthw
         RABBITMQ_PASSWORD: password1
@@ -69,10 +69,10 @@ services:
     notification:
       build:
         context: ./
-        dockerfile: ./estore/Dockerfile
+        dockerfile: ./notification/Dockerfile
       ports:
         - "8082:8080"
-      command: ["./wait.sh", "rebbitmq:5672", "--", "./run_notification.sh"]
+      command: ["./wait.sh", "rabbitmq:5672", "--", "./run_notification.sh"]
       environment:
         DJANGO_DEBUG: 1
         DJANGO_SECRET_KEY: secret123
