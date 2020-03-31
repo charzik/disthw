@@ -1,8 +1,15 @@
 from requests import request as http_request
+from datetime import datetime
 
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework_jwt.settings import api_settings
+from rest_framework_jwt.views import (
+    ObtainJSONWebToken,
+    jwt_response_payload_handler,
+)
 
 from . import serializers
 from . import models
@@ -33,6 +40,41 @@ def registration_view(request):
     return Response(data={'username': user.username})
 
 
-# @api_view(['GET'])
-# def confirm_registration_view(request, url_id):
-#     user =
+class LoginView(ObtainJSONWebToken):
+    def post(self, request, *args, **kwargs):
+        serializer = super().get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            user = serializer.object.get('user') or request.user
+            if not user.is_confirmed:
+                return Response(
+                    status=409, data={'text': 'Account did not confermed!'},
+                )
+            token = serializer.object.get('token')
+            response_data = jwt_response_payload_handler(token, user, request)
+            response = Response(response_data)
+            if api_settings.JWT_AUTH_COOKIE:
+                expiration = (
+                    datetime.utcnow() + api_settings.JWT_EXPIRATION_DELTA
+                )
+                response.set_cookie(
+                    api_settings.JWT_AUTH_COOKIE,
+                    token,
+                    expires=expiration,
+                    httponly=True,
+                )
+            return response
+
+        return Response(serializer.errors, status=400)
+
+
+@api_view(['GET'])
+def confirm_registration_view(request, url_id):
+    try:
+        account = models.Account.objects.get(confirm_url_id=url_id)
+        if not account.is_confirmed:
+            account.is_confirmed = True
+            account.save()
+        return Response(status=200, data={'text': 'Account confirmed!'})
+    except ObjectDoesNotExist:
+        return Response(status=404)

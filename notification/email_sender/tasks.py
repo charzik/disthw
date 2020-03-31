@@ -7,4 +7,4 @@ from notification.celery import celery_app
     retry_kwargs={'max_retries': 5, 'countdown': 2},
 )
 def send_registartion_email(self, email, confirm_url):
-    return 228
+    return confirm_url
