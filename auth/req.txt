@@ -5,3 +5,4 @@ djangorestframework-jwt
 pyjwt==1.5.3
 requests
 datetime
+uuid

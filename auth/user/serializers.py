@@ -1,3 +1,5 @@
+import uuid
+
 from rest_framework import serializers
 
 from . import models
@@ -5,25 +7,27 @@ from . import models
 
 class RegistrationSerializer(serializers.ModelSerializer):
 
-    password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+    password2 = serializers.CharField(
+        style={'input_type': 'password'}, write_only=True,
+    )
 
     class Meta:
         model = models.Account
         fields = ['email', 'username', 'password', 'password2']
-        extra_kwargs = {
-            'password': {'write_only': True},
-        }	
+        extra_kwargs = {'password': {'write_only': True}}
 
-
-    def	save(self):
+    def save(self):
         account = models.Account(
             email=self.validated_data['email'],
-            username=self.validated_data['username']
+            username=self.validated_data['username'],
         )
         password = self.validated_data['password']
         password2 = self.validated_data['password2']
         if password != password2:
-            raise serializers.ValidationError({'password': 'Passwords must match.'})
+            raise serializers.ValidationError(
+                {'password': 'Passwords must match.'},
+            )
         account.set_password(password)
+        account.confirm_url_id = str(uuid.uuid4())
         account.save()
         return account

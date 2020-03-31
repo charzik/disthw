@@ -3,12 +3,15 @@ version: '3.3'
 services:
     rabbitmq:
       image: 'bitnami/rabbitmq:latest'
+      hostname: rabbitmq
       environment:
         RABBITMQ_USERNAME: disthw
         RABBITMQ_PASSWORD: password1
         RABBITMQ_VHOST: disthw_host
+      ports:
+        - "5672:5672"
       networks:
-          - net 
+        - net 
 
     db:
       image: postgres
@@ -66,14 +69,13 @@ services:
       networks:
         - net
 
-    notification:
+    celery:
       build:
         context: ./
         dockerfile: ./notification/Dockerfile
-      ports:
-        - "8082:8080"
-      command: ["./wait.sh", "rabbitmq:5672", "--", "./run_notification.sh"]
+      command: ["./wait.sh", "rabbitmq:5672", "--", "./run_celery.sh"]
       environment:
+        CELERY_SERVICE_NAME: notification
         DJANGO_DEBUG: 1
         DJANGO_SECRET_KEY: secret123
         INTERNAL_SERVICES_ALLOWED_HOSTS: auth
@@ -84,6 +86,28 @@ services:
         DJANGO_BROKER_VHOST: disthw_host
       depends_on:
         - rabbitmq
+      restart: on-failure
+      networks:
+        - net
+
+    notification:
+      build:
+        context: ./
+        dockerfile: ./notification/Dockerfile
+      ports:
+        - "8082:8080"
+      command: ["./run.sh"]
+      environment:
+        DJANGO_DEBUG: 1
+        DJANGO_SECRET_KEY: secret123
+        INTERNAL_SERVICES_ALLOWED_HOSTS: auth
+        DJANGO_BROKER_USER: disthw
+        DJANGO_BROKER_PASSWORD: password1
+        DJANGO_BROKER_HOST: rabbitmq
+        DJANGO_BROKER_PORT: 5672
+        DJANGO_BROKER_VHOST: disthw_host
+      depends_on:
+        - celery
       networks:
         - net
 

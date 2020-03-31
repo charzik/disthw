@@ -1,7 +1,8 @@
 from notification.celery import celery_app
 
+
 @celery_app.task(
-    bind=True, 
+    bind=True,
     autoretry_for=(Exception,),
     retry_kwargs={'max_retries': 5, 'countdown': 2},
 )

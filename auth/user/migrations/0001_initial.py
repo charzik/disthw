@@ -24,6 +24,8 @@ class Migration(migrations.Migration):
                 ('is_active', models.BooleanField(default=True)),
                 ('is_staff', models.BooleanField(default=False)),
                 ('is_superuser', models.BooleanField(default=False)),
+                ('is_confirmed', models.BooleanField(default=False)),
+                ('confirm_url_id', models.CharField(max_length=64, default=True)),
             ],
             options={
                 'abstract': False,
