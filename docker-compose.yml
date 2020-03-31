@@ -9,7 +9,7 @@ services:
         RABBITMQ_PASSWORD: password1
         RABBITMQ_VHOST: disthw_host
       ports:
-        - "5672:5672"
+        - "5673:5672"
       networks:
         - net 
 
@@ -43,6 +43,7 @@ services:
         WAIT_PG_DB: auth_db
         NOTIFICATION_HOST: notification
         NOTIFICATION_PORT: 8080
+        SERVICE_PORT: 8080
       depends_on:
         - db
       networks:

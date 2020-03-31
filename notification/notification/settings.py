@@ -32,6 +32,9 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
+EMAIL_USER = os.environ.get('EMAIL_USER', '')
+EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD', '')
+
 ROOT_URLCONF = 'notification.urls'
 
 WSGI_APPLICATION = 'notification.wsgi.application'

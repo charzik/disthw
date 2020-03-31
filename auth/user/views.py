@@ -22,6 +22,11 @@ def registration_view(request):
         return Response(status=400, data=serializer.errors)
 
     user = serializer.save()
+    confirm_url = 'http://%s:%s/v1/user/confirm/%s' % (
+        settings.SERVICE_HOST,
+        settings.SERVICE_PORT,
+        user.confirm_url_id,
+    )
     try:
         notification_response = http_request(
             method='POST',
@@ -31,7 +36,7 @@ def registration_view(request):
                 settings.NOTIFICATION_PORT,
                 'v1/send-registartion-email',
             ),
-            json={'email': user.email, 'confirm_url': user.confirm_url_id},
+            json={'email': user.email, 'confirm_url': confirm_url},
         )
     except:
         return Response(status=500, data={'text': 'internal server error'})
