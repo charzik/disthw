@@ -1,6 +1,7 @@
 import smtplib
 from email.mime.text import MIMEText
 
+from django.conf import settings
 from notification.celery import celery_app
 
 
@@ -12,6 +13,9 @@ from notification.celery import celery_app
 def send_registartion_email(
         self, receiver_email, confirm_url, sender_email, sender_password,
 ):
+    if settings.DEBUG:
+        return confirm_url
+
     msg = MIMEText(
         'Для подтверждения аккаунта перейдите по ссылке %s.' % confirm_url,
     )
