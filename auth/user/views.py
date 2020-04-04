@@ -5,11 +5,10 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework_jwt.settings import api_settings
-from rest_framework_jwt.views import (
-    ObtainJSONWebToken,
-    jwt_response_payload_handler,
-)
+from rest_framework_simplejwt import serializers as jwt_serializers
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from rest_framework_simplejwt.authentication import AUTH_HEADER_TYPES
+from rest_framework import generics
 
 from . import serializers
 from . import models
@@ -45,32 +44,34 @@ def registration_view(request):
     return Response(data={'username': user.username})
 
 
-class LoginView(ObtainJSONWebToken):
-    def post(self, request, *args, **kwargs):
-        serializer = super().get_serializer(data=request.data)
+class LoginView(generics.GenericAPIView):
+    permission_classes = ()
+    authentication_classes = ()
 
-        if serializer.is_valid():
-            user = serializer.object.get('user') or request.user
+    serializer_class = jwt_serializers.TokenObtainPairSerializer
+
+    www_authenticate_realm = 'api'
+
+    def get_authenticate_header(self, request):
+        return '{0} realm="{1}"'.format(
+            AUTH_HEADER_TYPES[0],
+            self.www_authenticate_realm,
+        )
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            user = models.Account.objects.get(email=request.data['email'])
             if not user.is_confirmed:
                 return Response(
                     status=409, data={'text': 'Account did not confermed!'},
                 )
-            token = serializer.object.get('token')
-            response_data = jwt_response_payload_handler(token, user, request)
-            response = Response(response_data)
-            if api_settings.JWT_AUTH_COOKIE:
-                expiration = (
-                    datetime.utcnow() + api_settings.JWT_EXPIRATION_DELTA
-                )
-                response.set_cookie(
-                    api_settings.JWT_AUTH_COOKIE,
-                    token,
-                    expires=expiration,
-                    httponly=True,
-                )
-            return response
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
 
-        return Response(serializer.errors, status=400)
+        return Response(serializer.validated_data, status=200)
 
 
 @api_view(['GET'])

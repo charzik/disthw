@@ -2,6 +2,7 @@ django
 djangorestframework
 psycopg2>=2.7,<3.0
 djangorestframework-jwt
+djangorestframework-simplejwt
 pyjwt==1.5.3
 requests
 datetime
