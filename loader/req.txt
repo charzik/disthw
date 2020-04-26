@@ -1,0 +1,4 @@
+django
+djangorestframework
+celery
+psycopg2>=2.7,<3.0

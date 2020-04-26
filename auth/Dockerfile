@@ -8,4 +8,4 @@ RUN pip install -r req.txt
 ADD auth/ /app/
 ADD tools/ /app/
 
-CMD run.sh
+CMD ./run.sh
